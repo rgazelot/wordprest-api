@@ -12,8 +12,8 @@ class Rewrite
     {
         add_action('generate_rewrite_rules', array(&$this, 'generate'));
         add_filter('query_vars', array(&$this, 'addQueryVars'));
-        $this->flush();
-        $this->register();
+        // $this->flush();
+        // $this->register();
     }
 
     /**
@@ -25,7 +25,8 @@ class Rewrite
         global $wp_rewrite;
 
         $rules = array(
-            'api/(.+)?$' => 'index.php?fuckin-works=true'
+            'api/([a-zA-Z_-]+)/([0-9]+)$' => 'index.php?api&data_post_type=' . $wp_rewrite->preg_index(1) . '&data_id=' . $wp_rewrite->preg_index(2),
+            'api/([a-zA-Z_-]+)?$' => 'index.php?api&data_post_type=' . $wp_rewrite->preg_index(1)
         );
 
         $wp_rewrite->rules = $rules + $wp_rewrite->rules;
@@ -38,7 +39,9 @@ class Rewrite
     public function addQueryVars($wpvar)
     {
         $newVars = array(
-            'fuckin-works'
+            'api',
+            'data_post_type',
+            'data_id'
         );
 
         return array_merge($wpvar, $newVars);
@@ -51,7 +54,7 @@ class Rewrite
     public function flush()
     {
         global $wp_rewrite;
-        // $wp_rewrite->flush_rules();
+        $wp_rewrite->flush_rules();
     }
 
     /**

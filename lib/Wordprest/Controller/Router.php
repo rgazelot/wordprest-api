@@ -11,8 +11,10 @@ class Router
 
     public function parse($query)
     {
-        if (isset($query->query_vars['fuckin-works'])) {
-            die(var_dump('FUCKIN WORKS'));
+        if (isset($query->query_vars['api'])) {
+            var_dump($query->query_vars['data_post_type']);
+            var_dump($query->query_vars['data_id']);
+            die();
         }
     }
 }
