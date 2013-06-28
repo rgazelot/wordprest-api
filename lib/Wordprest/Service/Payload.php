@@ -4,5 +4,17 @@ namespace Wordprest\Service;
 
 class Payload
 {
-    public function __construct() {}
+    /**
+     * [success description]
+     * @return [type] [description]
+     */
+    public function success()
+    {}
+
+    /**
+     * [error description]
+     * @return [type] [description]
+     */
+    public function error()
+    {}
 }

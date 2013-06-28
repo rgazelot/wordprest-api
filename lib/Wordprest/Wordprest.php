@@ -2,12 +2,22 @@
 
 namespace Wordprest;
 
+use Wordprest\Controller\Router;
+use Wordprest\Controller\Rewrite;
+
 class Wordprest
 {
-    public function __construct() {}
+    private $router;
+    private $rewrite;
+
+    public function __construct() {
+        $this->router = new Router();
+        $this->rewrite = new Rewrite();
+    }
 
     public function start()
     {
-        error_log('Hello world');
+        $this->rewrite->start();
+        $this->router->start();
     }
 }
