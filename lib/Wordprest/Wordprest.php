@@ -4,6 +4,7 @@ namespace Wordprest;
 
 use Wordprest\Controller\Router;
 use Wordprest\Controller\Rewrite;
+use Wordprest\Admin\Admin;
 
 class Wordprest
 {
@@ -13,6 +14,7 @@ class Wordprest
     public function __construct() {
         $this->router = new Router();
         $this->rewrite = new Rewrite();
+        $this->admin = new Admin();
     }
 
     public function start()
