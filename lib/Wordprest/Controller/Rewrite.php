@@ -25,8 +25,8 @@ class Rewrite
         global $wp_rewrite;
 
         $rules = array(
-            'api/([a-zA-Z_-]+)/([0-9]+)$' => 'index.php?api&data_post_type=' . $wp_rewrite->preg_index(1) . '&data_id=' . $wp_rewrite->preg_index(2),
-            'api/([a-zA-Z_-]+)?$' => 'index.php?api&data_post_type=' . $wp_rewrite->preg_index(1)
+            'api/([a-zA-Z_-]+)/([0-9]+)$' => 'index.php?wordprest_api=true&wordprest_post_type=' . $wp_rewrite->preg_index(1) . '&wordprest_id=' . $wp_rewrite->preg_index(2),
+            'api/([a-zA-Z_-]+)?$' => 'index.php?wordprest_api=true&wordprest_post_type=' . $wp_rewrite->preg_index(1)
         );
 
         $wp_rewrite->rules = $rules + $wp_rewrite->rules;
@@ -39,9 +39,9 @@ class Rewrite
     public function addQueryVars($wpvar)
     {
         $newVars = array(
-            'api',
-            'data_post_type',
-            'data_id'
+            'wordprest_api',
+            'wordprest_post_type',
+            'wordprest_id'
         );
 
         return array_merge($wpvar, $newVars);

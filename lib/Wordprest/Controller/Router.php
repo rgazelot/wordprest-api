@@ -24,16 +24,16 @@ class Router
      */
     public function parse($query)
     {
-        if (!isset($query->query_vars['api'])) {
+        if (!isset($query->query_vars['wordprest_api'])) {
             return;
         }
 
         // Prevent from wiping options GET parameters
         $query = $this->setOptions($query, $_GET);
 
-        $query->set('post_type', htmlspecialchars($query->query_vars['data_post_type']));
-        if (isset($query->query_vars['data_id'])) {
-            $query->set('p', htmlspecialchars($query->query_vars['data_id']));
+        $query->set('post_type', htmlspecialchars($query->query_vars['wordprest_post_type']));
+        if (isset($query->query_vars['wordprest_id'])) {
+            $query->set('p', htmlspecialchars($query->query_vars['wordprest_id']));
         }
     }
 
@@ -45,6 +45,11 @@ class Router
     public function send($wp)
     {
         global $wp_query;
+
+        if (!isset($wp_query->query_vars['wordprest_api'])) {
+            return;
+        }
+
         $payload = new Payload();
 
         if (0 === count($wp_query->posts)) {
