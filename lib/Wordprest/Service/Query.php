@@ -111,8 +111,23 @@ class Query
      * Returns information about metadata, if there are some
      * @return array $metadata
      */
-    private function getMetadata()
+    private function getMetadata($post)
     {
-        return array();
+        $response = array();
+        $metadatas = get_metadata('post', $post->ID);
+
+        foreach ($metadatas as $key => $value) {
+            if ('_' !== $key[0]) {
+                continue;
+            }
+
+            $key = substr($key, 1);
+
+            if (array_key_exists($key, $metadatas)) {
+                $response[$key] = implode(',', $metadatas[$key]);
+            }
+        }
+
+        return $response;
     }
 }
