@@ -56,9 +56,21 @@ class Query
      * Returns information about taxonomies (all of them)
      * @return array $taxonomies
      */
-    private function getTaxonomies()
+    private function getTaxonomies($post)
     {
-        return array();
+        $response = array();
+        $taxonomies = get_object_taxonomies($post->post_type);
+
+        foreach ($taxonomies as $taxonomy) {
+            $terms = get_the_terms($post->ID, $taxonomy);
+            if (!empty($terms)) {
+                $response[$taxonomy] = array();
+                foreach ($terms as $term)
+                    $response[$taxonomy][] = $term;
+            }
+        }
+
+        return $response;
     }
 
     /**
