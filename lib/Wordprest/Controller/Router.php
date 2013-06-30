@@ -3,6 +3,7 @@
 namespace Wordprest\Controller;
 
 use Wordprest\Service\Payload;
+use Wordprest\Service\Query;
 
 class Router
 {
@@ -45,12 +46,15 @@ class Router
     {
         global $wp_query;
         $payload = new Payload();
+
         if (0 === count($wp_query->posts)) {
-            $payload->error([], 404, 'No posts found');
+            $payload->error(array(), 404, 'No posts found');
             return;
         }
 
-        $payload->success($wp_query->posts);
+        $query = new Query();
+        $posts = $query->format($wp_query->posts);
+        $payload->success($posts);
     }
 
     /**
