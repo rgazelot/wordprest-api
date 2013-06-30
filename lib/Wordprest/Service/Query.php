@@ -15,7 +15,7 @@ class Query
 
         foreach ($posts as $post) {
             $postArray = $this->postToArray($post);
-            $postArray['author'] = $this->getAuthor($post);
+            $postArray['post_author'] = $this->getAuthor($post);
             $postArray['taxonomies'] = $this->getTaxonomies($post);
             $postArray['thumbnail'] = $this->getThumbnail($post);
             $postArray['metadata'] = $this->getMetadata($post);
@@ -39,9 +39,17 @@ class Query
      * Returns information about the author
      * @return array $author
      */
-    private function getAuthor()
+    private function getAuthor($post)
     {
-        return array();
+        $meta = get_user_meta((int) $post->post_author);
+
+        // Why the fuck does this method return an array of arrays ?!
+        return array(
+            'first_name'  => $meta['first_name'][0],
+            'last_name'   => $meta['last_name'][0],
+            'nickname'    => $meta['nickname'][0],
+            'description' => $meta['description'][0]
+        );
     }
 
     /**
