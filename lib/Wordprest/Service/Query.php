@@ -65,9 +65,34 @@ class Query
      * If there is one, returns the thumbnail
      * @return array $thumbnail
      */
-    private function getThumbnail()
+    private function getThumbnail($post)
     {
-        return array();
+        $image = null;
+
+        if (has_post_thumbnail($post->ID)) {
+            $image = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'large');
+        } else {
+            $args = array(
+               'post_type'      => 'attachment',
+               'numberposts'    => 1,
+               'post_status'    => null,
+               'post_mime_type' => 'image',
+               'post_parent'    => $post->ID
+            );
+
+            $attachments = get_posts($args);
+            $image = wp_get_attachment_image_src($attachments[0]->ID, 'large');
+        }
+
+        if (empty($image)) {
+            return array();
+        }
+
+        return array(
+            'src' => $image[0],
+            'width' => $image[1],
+            'height' => $image[2]
+        );
     }
 
     /**
