@@ -3,7 +3,7 @@
 namespace Wordprest\Controller;
 
 use Wordprest\Service\Payload;
-use Wordprest\Service\Query;
+use Wordprest\Service\Select;
 
 class Router
 {
@@ -31,9 +31,22 @@ class Router
         // Prevent from wiping options GET parameters
         $query = $this->setOptions($query, $_GET);
 
-        $query->set('post_type', htmlspecialchars($query->query_vars['wordprest_post_type']));
-        if (isset($query->query_vars['wordprest_id'])) {
-            $query->set('p', htmlspecialchars($query->query_vars['wordprest_id']));
+        switch ($_SERVER['REQUEST_METHOD']) {
+            case 'POST':
+                $query->set('post_type', htmlspecialchars($query->query_vars['wordprest_post_type']));
+                break;
+            case 'PUT':
+            case 'PATCH':
+                break;
+            case 'DELETE':
+                break;
+            case 'GET':
+            default:
+                $query->set('post_type', htmlspecialchars($query->query_vars['wordprest_post_type']));
+                if (isset($query->query_vars['wordprest_id'])) {
+                    $query->set('p', htmlspecialchars($query->query_vars['wordprest_id']));
+                }
+                break;
         }
     }
 
@@ -57,7 +70,7 @@ class Router
             return;
         }
 
-        $query = new Query();
+        $query = new Select();
         $posts = $query->format($wp_query->posts);
         $payload->success($posts);
     }

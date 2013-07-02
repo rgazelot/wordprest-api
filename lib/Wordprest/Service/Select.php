@@ -2,7 +2,7 @@
 
 namespace Wordprest\Service;
 
-class Query
+class Select
 {
     /**
      * Format posts array and add some useful data
