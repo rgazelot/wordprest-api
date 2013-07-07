@@ -10,7 +10,6 @@ class Payload
      */
     public function success($data)
     {
-        status_header(200);
         $data = array(
             'success' => array('data' => $data)
         );

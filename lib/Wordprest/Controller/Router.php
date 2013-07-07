@@ -4,6 +4,7 @@ namespace Wordprest\Controller;
 
 use Wordprest\Service\Payload;
 use Wordprest\Service\Select;
+use Wordprest\Service\Insert;
 
 class Router
 {
@@ -33,10 +34,15 @@ class Router
 
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'POST':
-                $query->set('post_type', htmlspecialchars($query->query_vars['wordprest_post_type']));
-                break;
             case 'PUT':
             case 'PATCH':
+                try {
+                    $insert = new Insert();
+                    $insert->save($_POST['data'], $query->query_vars['wordprest_post_type'], $query->query_vars['wordprest_id']);
+                } catch (\Exception $e) {
+                    $payload = new Payload();
+                    $payload->error(json_decode($e->getMessage()), 400, 'Wrong parameters');
+                }
                 break;
             case 'DELETE':
                 break;
