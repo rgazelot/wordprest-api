@@ -5,6 +5,7 @@ namespace Wordprest\Controller;
 use Wordprest\Service\Payload;
 use Wordprest\Service\Select;
 use Wordprest\Service\Insert;
+use Wordprest\Service\Authenticator;
 
 class Router
 {
@@ -37,6 +38,8 @@ class Router
             case 'PUT':
             case 'PATCH':
                 try {
+                    $authenticator = new authenticator();
+                    var_dump($authenticator->authenticate());
                     $insert = new Insert();
                     $insert->save($_POST['data'], $query->query_vars['wordprest_post_type'], $query->query_vars['wordprest_id']);
                 } catch (\Exception $e) {

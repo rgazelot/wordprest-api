@@ -1,6 +1,6 @@
 <?php
 
-namespace Wordprest\Service\Authenticator;
+namespace Wordprest\Service;
 
 class Authenticator
 {

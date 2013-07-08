@@ -21,5 +21,9 @@ class Wordprest
     {
         $this->rewrite->start();
         $this->router->start();
+
+        if (false === get_option('wordprest_api_keys')) {
+            add_option('wordprest_api_keys', array());
+        }
     }
 }
