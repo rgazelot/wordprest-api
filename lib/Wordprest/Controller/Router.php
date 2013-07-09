@@ -5,10 +5,26 @@ namespace Wordprest\Controller;
 use Wordprest\Service\Payload;
 use Wordprest\Service\Select;
 use Wordprest\Service\Insert;
+use Wordprest\Service\Delete;
 use Wordprest\Service\Authenticator;
 
 class Router
 {
+    private $payload;
+    private $select;
+    private $insert;
+    private $delete;
+    private $authenticator;
+
+    public function __construct()
+    {
+        $this->payload = new Payload();
+        $this->select = new Select();
+        $this->insert = new Insert();
+        $this->delete = new Delete();
+        $this->authenticator = new Authenticator();
+    }
+
     /**
      * Starts the router
      * @return
@@ -38,16 +54,20 @@ class Router
             case 'PUT':
             case 'PATCH':
                 try {
-                    $authenticator = new authenticator();
-                    var_dump($authenticator->authenticate());
-                    $insert = new Insert();
-                    $insert->save($_POST['data'], $query->query_vars['wordprest_post_type'], $query->query_vars['wordprest_id']);
+                    $user = $this->authenticator->authenticate();
+                    $this->insert->save($_POST['data'], $user, $query->query_vars['wordprest_post_type'], $query->query_vars['wordprest_id']);
                 } catch (\Exception $e) {
-                    $payload = new Payload();
-                    $payload->error(json_decode($e->getMessage()), 400, 'Wrong parameters');
+                    $this->payload->error(array(), 400, $e->getMessage());
                 }
                 break;
             case 'DELETE':
+                try {
+                    $user = $this->authenticator->authenticate();
+                    $deletedPost = $this->delete->delete($user, $query->query_vars['wordprest_id']);
+                    $this->payload->success(array($deletedPost));
+                } catch (\Exception $e) {
+                    $this->payload->error(array(), 400, $e->getMessage());
+                }
                 break;
             case 'GET':
             default:
@@ -72,16 +92,13 @@ class Router
             return;
         }
 
-        $payload = new Payload();
-
         if (0 === count($wp_query->posts)) {
-            $payload->error(array(), 404, 'No posts found');
+            $this->payload->error(array(), 404, 'No posts found');
             return;
         }
 
-        $query = new Select();
-        $posts = $query->format($wp_query->posts);
-        $payload->success($posts);
+        $posts = $this->select->format($wp_query->posts);
+        $this->payload->success($posts);
     }
 
     /**
