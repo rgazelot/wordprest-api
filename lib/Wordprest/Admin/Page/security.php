@@ -85,5 +85,7 @@
 
         <?php } ?>
 
+        </tbody>
+
     </table>
 </div>

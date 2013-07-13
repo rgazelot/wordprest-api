@@ -24,7 +24,7 @@ class Admin
      */
     public function displayIndex()
     {
-        echo file_get_contents(__DIR__ . '/Page/index.html');
+        include(__DIR__ . '/Page/index.php');
     }
 
     /**
