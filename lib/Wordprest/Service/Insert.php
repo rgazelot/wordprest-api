@@ -45,7 +45,19 @@ class Insert
             throw new \Exception('Missing mandatory parameters');
         }
 
-        header('Location: ' . get_bloginfo('url') . '/api/' . $postType . '/' . $id);
+        $result = (int) $result;
+        $customFields = $data['custom_fields'];
+
+        if (!is_array($customFields) && !empty($customFields)) {
+            throw new \Exception('Parameter custom_fields must be an array');
+        }
+
+        // Adding custom fields
+        foreach ($customFields as $customField) {
+            add_post_meta($result, $customField['key'], $customField['value']) || update_post_meta($result, $customField['key'], $customField['value']);
+        }
+
+        header('Location: ' . get_bloginfo('url') . '/api/' . $postType . '/' . $result);
         die;
     }
 }
