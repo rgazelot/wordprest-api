@@ -46,9 +46,9 @@ class Insert
         }
 
         $result = (int) $result;
-        $customFields = $data['custom_fields'];
+        $customFields = array_key_exists('custom_fields', $data) ? $data['custom_fields'] : array();
 
-        if (!is_array($customFields) && !empty($customFields)) {
+        if (!is_array($customFields)) {
             throw new \Exception('Parameter custom_fields must be an array');
         }
 
