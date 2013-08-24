@@ -32,7 +32,7 @@ class Authenticator
      */
     public function canCreate($user)
     {
-        if (!current_user_can('create_posts'))
+        if (!current_user_can('publish_posts'))
             throw new \Exception('You\'re not allowed to create a post');
     }
 
