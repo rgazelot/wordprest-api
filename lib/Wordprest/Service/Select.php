@@ -18,7 +18,7 @@ class Select
             $postArray['post_author'] = $this->getAuthor($post);
             $postArray['taxonomies'] = $this->getTaxonomies($post);
             $postArray['thumbnail'] = $this->getThumbnail($post);
-            $postArray['metadata'] = $this->getMetadata($post);
+            $postArray['custom_fields'] = $this->getMetadata($post);
             $response[] = $postArray;
         }
 
