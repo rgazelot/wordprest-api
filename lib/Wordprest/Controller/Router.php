@@ -71,7 +71,21 @@ class Router
                 break;
             case 'GET':
             default:
-                $query->set('post_type', htmlspecialchars($query->query_vars['wordprest_post_type']));
+                // Handle post_type
+                if ('all' !== $query->query_vars['wordprest_post_type']) {
+                    $post_type = htmlspecialchars($query->query_vars['wordprest_post_type']);
+                } else {
+                    $args = array(
+                        'publicly_queryable' => true,
+                        'public'             => true
+                    );
+                    $post_type = get_post_types($args);
+                    unset($post_type['attachment']);
+                }
+
+                $query->set('post_type', $post_type);
+
+                // Handle specific ID
                 if (isset($query->query_vars['wordprest_id'])) {
                     $query->set('p', htmlspecialchars($query->query_vars['wordprest_id']));
                 }
